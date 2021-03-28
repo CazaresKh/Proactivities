@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Persistence;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,30 +16,30 @@ namespace Application.Activities
         public class Handler : IRequestHandler<Query, List<Activity>>
         {
             private readonly DataContext _context;
-            private readonly ILogger _logger;
+            //private readonly ILogger _logger;
 
             public Handler(DataContext context, ILogger<List> logger)
             {
                 _context = context;
-                _logger = logger;
+                //_logger = logger;
             }
 
             public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
             {
-                try
-                {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        cancellationToken.ThrowIfCancellationRequested();
-                        await Task.Delay(1000, cancellationToken);
-                        _logger.LogInformation($"Task{i} has completes");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogInformation($"Task has canceled");
-                    
-                }
+                //try
+                //{
+                //    for (int i = 0; i < 10; i++)
+                //    {
+                //        cancellationToken.ThrowIfCancellationRequested();
+                //        await Task.Delay(1000, cancellationToken);
+                //        _logger.LogInformation($"Task{i} has completes");
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+                //    _logger.LogInformation($"Task has canceled");
+
+                //}
 
                 return await _context.Activities.ToListAsync(cancellationToken);
             }

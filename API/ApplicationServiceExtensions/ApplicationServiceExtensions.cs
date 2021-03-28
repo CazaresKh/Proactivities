@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Persistence;
+using System.Reflection;
 
 namespace API.ApplicationServiceExtensions
 {
@@ -31,6 +32,7 @@ namespace API.ApplicationServiceExtensions
             });
 
             services.AddMediatR(typeof(List.Handler).Assembly);
+
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
             return services;
