@@ -1,9 +1,8 @@
-﻿using MediatR;
-using System;
+﻿using System;
 
 namespace Application.Activities.Commands
 {
-    public class DeleteActivityCommand : SimpleCommand, IRequest
+    public class DeleteActivityCommand : SimpleCommand
     {
         public DeleteActivityCommand(Guid id) : base(id) { }
     }

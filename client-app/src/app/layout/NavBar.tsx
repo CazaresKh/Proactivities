@@ -15,6 +15,7 @@ export default function NavBar() {
           <label>Reactivities</label>
         </Menu.Item>
         <Menu.Item as={NavLink} to="/activities" name="Activities" />
+        <Menu.Item as={NavLink} to="/errors" name="Errors" />
         <Menu.Item as={NavLink} to="/create-activity" name="Create activity" />
       </Container>
     </Menu>

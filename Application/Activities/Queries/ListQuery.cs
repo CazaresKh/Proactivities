@@ -1,11 +1,11 @@
 ﻿using Domain;
 using MediatR;
 using System.Collections.Generic;
+using Application.Core;
 
 namespace Application.Activities.Queries
 {
-    public class ListQuery : IRequest<ICollection<Activity>> 
+    public class ListQuery : IRequest<Result<ICollection<Activity>>> 
     {
-        public ICollection<Activity> Activities { get; set; }
     }
 }
