@@ -6,9 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Persistence;
-using System.Reflection;
 
-namespace API.ApplicationServiceExtensions
+namespace API.Extensions
 {
     public static class ApplicationServiceExtensions
     {
