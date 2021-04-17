@@ -2,6 +2,8 @@ import axios, { AxiosResponse, AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { Activity } from "../models/activity";
+import { User } from "../models/user";
+import { UserFormValues } from "../models/userFormValues";
 import { store } from "../stores/store";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
@@ -14,6 +16,14 @@ const sleep = (delay: number) => {
   });
 };
 
+axios.interceptors.request.use((config) => {
+  const token = store.commonStore.token;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 axios.interceptors.response.use(
   async (response) => {
     await sleep(1000);
@@ -23,7 +33,7 @@ axios.interceptors.response.use(
     const { data, status, config } = error.response!;
     switch (status) {
       case 400:
-        if(typeof data === "string"){
+        if (typeof data === "string") {
           toast.error(data);
         }
         if (config.method === "get" && data.errors.hasOwnProperty("id")) {
@@ -37,7 +47,7 @@ axios.interceptors.response.use(
             }
           }
           throw modalStateErrors.flat();
-        } 
+        }
         break;
       case 401:
         toast.error("unathoriaed");
@@ -71,8 +81,16 @@ const Activities = {
   delete: (id: string) => requests.delete<void>(`/activities/${id}`),
 };
 
+const Account = {
+  current: () => requests.get<User>("/account"),
+  login: (user: UserFormValues) => requests.post<User>("/account/login", user),
+  register: (user: UserFormValues) =>
+    requests.post<User>("/account/register", user),
+};
+
 const agent = {
   Activities,
+  Account,
 };
 
 export default agent;
