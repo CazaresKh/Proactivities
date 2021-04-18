@@ -15,8 +15,6 @@ namespace Application.Activities.Handlers
         {
             var activity = await Context.Activities.FindAsync(request.Id);
 
-            //if (activity == null) return null;
-
             Context.Remove(activity);
 
             var result = await Context.SaveChangesAsync(cancellationToken) > 0;

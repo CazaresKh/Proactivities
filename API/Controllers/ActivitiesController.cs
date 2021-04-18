@@ -4,23 +4,21 @@ using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<ICollection<Activity>>> GetActivities(CancellationToken ct)
+        public async Task<ActionResult> GetActivities(CancellationToken ct)
         {
             return HandleResult(await Mediator.Send(new ListQuery(), ct));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> GetActivity(Guid id)
+        public async Task<ActionResult> GetActivity(Guid id)
         {
             return HandleResult(await Mediator.Send(new ActivityQuery(id)));
         }
@@ -31,6 +29,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new CreateActivityCommand(activity)));
         }
 
+        [Authorize(Policy ="IsActivityHost")]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditActivity(Guid id, Activity activity)
         {
@@ -39,9 +38,15 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Activity>> DeleteActivity(Guid id)
+        public async Task<ActionResult> DeleteActivity(Guid id)
         {
             return HandleResult(await Mediator.Send(new DeleteActivityCommand(id)));
+        }
+
+        [HttpPost("{id}/attend")]
+        public async Task<IActionResult> Attend(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new UpdateAttendanceCommand(id)));
         }
     }
 }

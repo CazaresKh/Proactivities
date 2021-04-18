@@ -1,23 +1,32 @@
 ﻿using Application.Activities.Queries;
-using Domain;
+using Application.Core;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Core;
 
 namespace Application.Activities.Handlers
 {
-    public class ListActivityHandler : BaseHandler, IRequestHandler<ListQuery, Result<ICollection<Activity>>>
+    public class ListActivityHandler : BaseHandler, IRequestHandler<ListQuery, Result<ICollection<ActivityDto>>>
     {
-        public ListActivityHandler(DataContext context) : base(context) { }
+        private readonly IMapper _mapper;
 
-        public async Task<Result<ICollection<Activity>>> Handle(ListQuery request, CancellationToken cancellationToken)
+        public ListActivityHandler(DataContext context, IMapper mapper) : base(context)
         {
-            var result = await Context.Activities.ToListAsync(cancellationToken);
-            return Result<ICollection<Activity>>.Success(result);
+            _mapper = mapper;
+        }
+
+        public async Task<Result<ICollection<ActivityDto>>> Handle(ListQuery request, CancellationToken cancellationToken)
+        {
+            var result = await Context.Activities
+                                          .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+                                          .ToListAsync(cancellationToken);
+
+            return Result<ICollection<ActivityDto>>.Success(result);
         }
     }
 }

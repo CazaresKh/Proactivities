@@ -1,4 +1,5 @@
-﻿using Persistence;
+﻿using AutoMapper;
+using Persistence;
 
 namespace Application.Activities.Handlers
 {

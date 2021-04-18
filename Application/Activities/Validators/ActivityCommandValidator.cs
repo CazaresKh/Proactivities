@@ -10,5 +10,4 @@ namespace Application.Activities.Validators
             RuleFor(x => x.Activity).SetValidator(new ActivityValidator());
         }
     }
-
 }

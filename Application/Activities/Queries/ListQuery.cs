@@ -5,7 +5,7 @@ using Application.Core;
 
 namespace Application.Activities.Queries
 {
-    public class ListQuery : IRequest<Result<ICollection<Activity>>> 
+    public class ListQuery : IRequest<Result<ICollection<ActivityDto>>> 
     {
     }
 }

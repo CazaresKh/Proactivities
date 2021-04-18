@@ -15,6 +15,7 @@ namespace API
     public class Startup
     {
         private readonly IConfiguration _config;
+
         public Startup(IConfiguration config)
         {
             _config = config;
@@ -23,7 +24,6 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers(opt=>
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
@@ -34,7 +34,9 @@ namespace API
             {
                 config.RegisterValidatorsFromAssemblyContaining<Create>();
             });
+
             services.AddApplicationServices(_config);
+
             services.AddIdentityServices(_config);
         }
 
@@ -57,6 +59,7 @@ namespace API
             app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
