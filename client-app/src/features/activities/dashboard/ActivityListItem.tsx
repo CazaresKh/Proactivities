@@ -18,12 +18,17 @@ export default function ActivityListItem({ activity }: Props) {
             attached="top"
             color="red"
             content="Canceled"
-            style={{ textAlign: 'center' }}
+            style={{ textAlign: "center" }}
           />
         )}
         <Item.Group>
           <Item>
-            <Item.Image style={{marginBottom: 3}} size="tiny" circular src="/assets/user.png" />
+            <Item.Image
+              style={{ marginBottom: 3 }}
+              size="tiny"
+              circular
+              src="/assets/user.png"
+            />
             <Item.Content>
               <Item.Header as={Link} to={`/activities/${activity.id}`}>
                 {activity.title}
@@ -31,6 +36,7 @@ export default function ActivityListItem({ activity }: Props) {
               <Item.Description>
                 Hoted by {activity.host?.displayName}
               </Item.Description>
+
               {activity.isHost && (
                 <Item.Description>
                   <Label basic color="orange">
@@ -38,6 +44,7 @@ export default function ActivityListItem({ activity }: Props) {
                   </Label>
                 </Item.Description>
               )}
+
               {activity.isGoing && !activity.isHost && (
                 <Item.Description>
                   <Label basic color="green">
@@ -45,6 +52,7 @@ export default function ActivityListItem({ activity }: Props) {
                   </Label>
                 </Item.Description>
               )}
+              
             </Item.Content>
           </Item>
         </Item.Group>

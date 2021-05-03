@@ -1,5 +1,6 @@
 ﻿using Application.Activities.Commands;
 using Application.Core;
+using Application.Integration;
 using Application.Interfaces;
 using Domain;
 using MediatR;

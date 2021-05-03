@@ -1,5 +1,6 @@
 ﻿using Application.Activities.Queries;
 using Application.Core;
+using Application.Integration;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain;
