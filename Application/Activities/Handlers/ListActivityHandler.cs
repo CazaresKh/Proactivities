@@ -4,16 +4,15 @@ using Application.Integration;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Interfaces;
 
 namespace Application.Activities.Handlers
 {
-    public class ListActivityHandler : BaseHandler, IRequestHandler<ListQuery, Result<ICollection<ActivityDto>>>
+    public class ListActivityHandler : BaseHandler, IRequestHandler<ListQuery, Result<PagedList<ActivityDto>>>
     {
         private readonly IMapper _mapper;
 
@@ -23,15 +22,32 @@ namespace Application.Activities.Handlers
             _mapper = mapper;
         }
 
-        public async Task<Result<ICollection<ActivityDto>>> Handle(ListQuery request,
+        public async Task<Result<PagedList<ActivityDto>>> Handle(ListQuery request,
             CancellationToken cancellationToken)
         {
-            var result = await Context.Activities
+            var query = Context.Activities
+                .Where(d => d.Date >= request.Params.StartDate)
+                .OrderBy(d => d.Date)
                 .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
                     new {currentUserName = UserAccessor.GetUserName()})
-                .ToListAsync(cancellationToken);
+                .AsQueryable();
 
-            return Result<ICollection<ActivityDto>>.Success(result);
+            if (request.Params.IsGoing && !request.Params.IsHost)
+            {
+                query = query.Where(x => x.Attendees.Any(a => a.UserName == UserAccessor.GetUserName()));
+            }
+
+            if (request.Params.IsHost && !request.Params.IsGoing)
+            {
+                query = query.Where(x => x.HostUserName == UserAccessor.GetUserName());
+            }
+
+            var result = Result<PagedList<ActivityDto>>.Success(
+                await PagedList<ActivityDto>.CreateAsync(query, request.Params.PageNumber,
+                    request.Params.PageSize)
+            );
+
+            return result;
         }
     }
 }

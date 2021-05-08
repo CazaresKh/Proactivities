@@ -6,19 +6,22 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Activities;
+using Application.Core;
 
 namespace API.Controllers
 {
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult> GetActivities(CancellationToken ct)
+        public async Task<IActionResult> GetActivities([FromQuery] ActivityParams pagingParams,
+            CancellationToken ct)
         {
-            return HandleResult(await Mediator.Send(new ListQuery(), ct));
+            return HandlePagedResult(await Mediator.Send(new ListQuery(pagingParams), ct));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetActivity(Guid id)
+        public async Task<IActionResult> GetActivity(Guid id)
         {
             return HandleResult(await Mediator.Send(new ActivityQuery(id)));
         }
@@ -29,7 +32,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new CreateActivityCommand(activity)));
         }
 
-        [Authorize(Policy ="IsActivityHost")]
+        [Authorize(Policy = "IsActivityHost")]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditActivity(Guid id, Activity activity)
         {

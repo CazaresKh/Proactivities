@@ -4,7 +4,7 @@ import { Header } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import ActivityListItem from "./ActivityListItem";
 
-export default observer(function ActivityList() {
+function ActivityList() {
   const { activityStore } = useStore();
   const { groupedActivities } = activityStore;
 
@@ -22,4 +22,6 @@ export default observer(function ActivityList() {
       ))}
     </>
   );
-});
+}
+
+export default observer(ActivityList);

@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
@@ -35,7 +34,7 @@ export default function ActivityListItem({ activity }: Props) {
               </Item.Header>
               <Item.Description>
                 Hoted by
-                <Link to={`/profiles/${activity.hostUserName}`}>
+                <Link to={`/profiles/${activity.host?.userName}`}>
                   {activity.host?.displayName}
                 </Link>
               </Item.Description>
