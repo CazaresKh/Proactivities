@@ -6,12 +6,10 @@ namespace Application.Integration
     public class SupportHandler : BaseHandler
     {
         protected IPhotoAccessor PhotoAccessor { get; }
-        protected IUserAccessor UserAccessor { get; }
 
         protected SupportHandler(DataContext context, IUserAccessor userAccessor, IPhotoAccessor photoAccessor) :
-            base(context)
+            base(context, userAccessor)
         {
-            UserAccessor = userAccessor;
             PhotoAccessor = photoAccessor;
         }
     }

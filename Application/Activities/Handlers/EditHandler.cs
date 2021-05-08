@@ -6,6 +6,7 @@ using MediatR;
 using Persistence;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Interfaces;
 
 namespace Application.Activities.Handlers
 {
@@ -13,7 +14,7 @@ namespace Application.Activities.Handlers
     {
         private readonly IMapper _mapper;
 
-        public EditHandler(DataContext context, IMapper mapper) : base(context)
+        public EditHandler(DataContext context, IMapper mapper, IUserAccessor userAccessor) : base(context, userAccessor)
         {
             _mapper = mapper;
         }

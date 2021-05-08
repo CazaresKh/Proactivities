@@ -5,12 +5,15 @@ using MediatR;
 using Persistence;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Interfaces;
 
 namespace Application.Activities.Handlers
 {
     public class DeleteHandler<Guid> : BaseHandler, IRequestHandler<DeleteActivityCommand, Result<Unit>>
     {
-        public DeleteHandler(DataContext context) : base(context) { }
+        public DeleteHandler(DataContext context, IUserAccessor userAccessor) : base(context, userAccessor)
+        {
+        }
 
         public async Task<Result<Unit>> Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
         {

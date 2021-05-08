@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Interfaces;
 
 namespace Application.Activities.Handlers
 {
@@ -16,7 +17,8 @@ namespace Application.Activities.Handlers
     {
         private readonly IMapper _mapper;
 
-        public DetailsHandler(DataContext context, IMapper mapper) : base(context)
+        public DetailsHandler(DataContext context, IMapper mapper, IUserAccessor userAccessor) : base(context,
+            userAccessor)
         {
             _mapper = mapper;
         }
@@ -24,8 +26,8 @@ namespace Application.Activities.Handlers
         public async Task<Result<ActivityDto>> Handle(ActivityQuery request, CancellationToken cancellationToken)
         {
             var activity = await Context.Activities
-                                        .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
-                                        .FirstOrDefaultAsync(x => x.Id == request.Id);
+                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, new{})
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             return Result<ActivityDto>.Success(activity);
         }

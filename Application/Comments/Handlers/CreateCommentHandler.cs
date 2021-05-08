@@ -14,13 +14,11 @@ namespace Application.Comments.Handlers
 {
     public class CreateCommentHandler : BaseHandler, IRequestHandler<CreateCommentCommand, Result<CommentDto>>
     {
-        private readonly IUserAccessor _userAccessor;
         private readonly IMapper _mapper;
 
-
-        public CreateCommentHandler(DataContext context, IUserAccessor userAccessor, IMapper mapper) : base(context)
+        public CreateCommentHandler(DataContext context, IUserAccessor userAccessor, IMapper mapper) : base(context,
+            userAccessor)
         {
-            _userAccessor = userAccessor;
             _mapper = mapper;
         }
 
@@ -34,7 +32,7 @@ namespace Application.Comments.Handlers
             }
 
             var user = await Context.Users.Include(p => p.Photos)
-                .SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName(), cancellationToken);
+                .SingleOrDefaultAsync(x => x.UserName == UserAccessor.GetUserName(), cancellationToken);
 
             var comment = new Comment
             {

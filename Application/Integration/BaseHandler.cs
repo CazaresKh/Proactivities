@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Interfaces;
+using AutoMapper;
 using Persistence;
 
 namespace Application.Integration
@@ -7,9 +8,12 @@ namespace Application.Integration
     {
         protected DataContext Context { get; }
 
-        protected BaseHandler(DataContext context)
+        protected IUserAccessor UserAccessor { get; }
+
+        protected BaseHandler(DataContext context, IUserAccessor userAccessor)
         {
             Context = context;
+            UserAccessor = userAccessor;
         }
     }
 }

@@ -13,15 +13,14 @@ namespace Application.Activities.Handlers
 {
     public class CreateHandler : BaseHandler, IRequestHandler<CreateActivityCommand, Result<Unit>>
     {
-        private readonly IUserAccessor _userAccessor;
-        public CreateHandler(DataContext context, IUserAccessor userAccessor) : base(context)
+        public CreateHandler(DataContext context, IUserAccessor userAccessor) : base(context, userAccessor)
         {
-            _userAccessor = userAccessor;
         }
 
         public async Task<Result<Unit>> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
         {
-            var user = await Context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUserName());
+            var user = await Context.Users.FirstOrDefaultAsync(x => x.UserName == UserAccessor.GetUserName(),
+                cancellationToken);
 
             var attendee = new ActivityAttendee
             {

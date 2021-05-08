@@ -9,6 +9,7 @@ using Persistence;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Interfaces;
 
 namespace Application.Activities.Handlers
 {
@@ -16,16 +17,19 @@ namespace Application.Activities.Handlers
     {
         private readonly IMapper _mapper;
 
-        public ListActivityHandler(DataContext context, IMapper mapper) : base(context)
+        public ListActivityHandler(DataContext context, IMapper mapper, IUserAccessor userAccessor) : base(context,
+            userAccessor)
         {
             _mapper = mapper;
         }
 
-        public async Task<Result<ICollection<ActivityDto>>> Handle(ListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ICollection<ActivityDto>>> Handle(ListQuery request,
+            CancellationToken cancellationToken)
         {
             var result = await Context.Activities
-                                          .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
-                                          .ToListAsync(cancellationToken);
+                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider,
+                    new {currentUserName = UserAccessor.GetUserName()})
+                .ToListAsync(cancellationToken);
 
             return Result<ICollection<ActivityDto>>.Success(result);
         }

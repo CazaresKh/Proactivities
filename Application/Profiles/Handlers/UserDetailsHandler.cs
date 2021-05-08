@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Integration;
+using Application.Interfaces;
 using Application.Profiles.Queries;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -14,7 +15,9 @@ namespace Application.Profiles.Handlers
     public class UserDetailsHandler : BaseHandler, IRequestHandler<UserDetailsQuery, Result<Profile>>
     {
         private readonly IMapper _mapper;
-        public UserDetailsHandler(DataContext context, IMapper mapper) : base(context)
+
+        public UserDetailsHandler(DataContext context, IMapper mapper, IUserAccessor userAccessor) : base(context,
+            userAccessor)
         {
             _mapper = mapper;
         }
@@ -22,8 +25,8 @@ namespace Application.Profiles.Handlers
         public async Task<Result<Profile>> Handle(UserDetailsQuery request, CancellationToken cancellationToken)
         {
             var user = await Context.Users
-            .ProjectTo<Profile>(_mapper.ConfigurationProvider)
-            .SingleOrDefaultAsync(x => x.UserName == request.UserName, cancellationToken);
+                .ProjectTo<Profile>(_mapper.ConfigurationProvider, new {currentUserName = UserAccessor.GetUserName()})
+                .SingleOrDefaultAsync(x => x.UserName == request.UserName, cancellationToken);
 
             return user == null ? null : Result<Profile>.Success(user);
         }
