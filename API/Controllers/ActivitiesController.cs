@@ -7,7 +7,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Activities;
-using Application.Core;
 
 namespace API.Controllers
 {
@@ -41,7 +40,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteActivity(Guid id)
+        public async Task<IActionResult> DeleteActivity(Guid id)
         {
             return HandleResult(await Mediator.Send(new DeleteActivityCommand(id)));
         }

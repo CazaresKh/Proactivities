@@ -14,7 +14,7 @@ namespace API.Controllers
 
         protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 
-        protected ActionResult HandleResult<T>(Result<T> result)
+        protected IActionResult HandleResult<T>(Result<T> result)
         {
             if (result == null || (result.IsSuccess && result.Value == null))
             {
@@ -29,21 +29,21 @@ namespace API.Controllers
             return BadRequest(result.Error);
         }
 
-        protected ActionResult HandlePagedResult<T>(Result<PagedList<T>> result)
+        protected IActionResult HandlePagedResult<T>(Result<PagedList<T>> result)
         {
             if (result == null || (result.IsSuccess && result.Value == null))
             {
                 return NotFound();
             }
 
-            if (!result.IsSuccess || result.Value == null)
+            if (result.IsSuccess && result.Value != null)
             {
-                return BadRequest(result.Error);
+                Response.AddPaginationHeader(result.Value.CurrentPage, result.Value.PageSize, result.Value.TotalCount,
+                    result.Value.TotalPages);
+                return Ok(result.Value);
             }
 
-            Response.AddPaginationHeader(result.Value.CurrentPage, result.Value.PageSize, result.Value.TotalCount,
-                result.Value.TotalPages);
-            return Ok(result.Value);
+            return BadRequest(result.Error);
         }
     }
 }

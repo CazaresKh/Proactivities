@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using System;
 using Application.Core;
 
 namespace Application.Integration

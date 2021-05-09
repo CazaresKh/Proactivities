@@ -1,6 +1,5 @@
 using System;
 using System.Net;
-using System.Net.WebSockets;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
@@ -38,7 +37,7 @@ namespace API.Middleware
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 var response = _env.IsDevelopment()
-                    ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace?.ToString())
+                    ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace)
                     : new AppException(context.Response.StatusCode, "Server Error");
 
                 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };

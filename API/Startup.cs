@@ -1,7 +1,7 @@
 using API.Extensions;
 using API.Middleware;
 using API.SignalR;
-using Application.Activities;
+using Application.Activities.Validators;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -27,10 +27,15 @@ namespace API
         {
             services.AddControllers(opt =>
                 {
-                    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
                     opt.Filters.Add(new AuthorizeFilter(policy));
                 })
-                .AddFluentValidation(config => { config.RegisterValidatorsFromAssemblyContaining<Create>(); });
+                .AddFluentValidation(config =>
+                {
+                    config.RegisterValidatorsFromAssemblyContaining<ActivityValidator>();
+                });
 
             services.AddApplicationServices(_config);
 

@@ -1,5 +1,4 @@
 ﻿using Application.Interfaces;
-using AutoMapper;
 using Persistence;
 
 namespace Application.Integration

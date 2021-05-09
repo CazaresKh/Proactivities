@@ -1,6 +1,4 @@
-﻿using Domain;
-using MediatR;
-using System.Collections.Generic;
+﻿using MediatR;
 using Application.Core;
 
 namespace Application.Activities.Queries
