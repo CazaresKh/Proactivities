@@ -61,6 +61,7 @@ namespace API
                 .FrameAncestors(s => s.Self())
                 .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "https://www.facebook.com",
                                                           "https://scontent.fhrk7-1.fna.fbcdn.net",
+                                                          "https://scontent-lga3-1.xx.fbcdn.net",
                                                           "https://platform-lookaside.fbsbx.com", "blob:", "data:"))
                 .ScriptSources(s => s.Self().CustomSources("sha256-3FEeBV7dgO547T6vrbTyPtkLKbKjG+H4zEwVWvUemiw=",
                                                             "https://connect.facebook.net",
