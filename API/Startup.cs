@@ -60,7 +60,8 @@ namespace API
                 .FormActions(s => s.Self())
                 .FrameAncestors(s => s.Self())
                 .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "https://www.facebook.com",
-                                                          "https://scontent.fhrk7-1.fna.fbcdn.net", "blob:", "data:"))
+                                                          "https://scontent.fhrk7-1.fna.fbcdn.net",
+                                                          "https://platform-lookaside.fbsbx.com", "blob:", "data:"))
                 .ScriptSources(s => s.Self().CustomSources("sha256-3FEeBV7dgO547T6vrbTyPtkLKbKjG+H4zEwVWvUemiw=",
                                                             "https://connect.facebook.net",
                                                             "sha256-1D19CFC2QTypxQmhEJku2FSuyIt+YyRC6oXApZEkAxk="))
