@@ -7,6 +7,8 @@ import { store } from "./store";
 
 export default class UserStore {
   user: User | null = null;
+  fbAccessToken: string | null = null;
+  fbloading = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -64,7 +66,45 @@ export default class UserStore {
 
   setDisplayName = (name: string) => {
     if (this.user) {
-      this.user.displayName = name
+      this.user.displayName = name;
+    }
+  };
+
+  getFacebookLoginStatus = async () => {
+    window.FB.getLoginStatus((response) => {
+      if (response.status === "connected") {
+        this.fbAccessToken = response.authResponse.accessToken;
+      }
+    });
+  };
+
+  facebookLogin = () => {
+    this.fbloading = true;
+    const apiLogin = (accessToken: string) => {
+      agent.Account.fblogin(accessToken)
+        .then((user) => {
+          store.commonStore.setToken(user.token);
+          runInAction(() => {
+            this.user = user;
+            this.fbloading = false;
+          });
+          history.push("/activities");
+        })
+        .catch((error) => {
+          console.log(error);
+          runInAction(() => (this.fbloading = false));
+        });
     };
+
+    if (this.fbAccessToken) {
+      apiLogin(this.fbAccessToken);
+    } else {
+      window.FB.login(
+        (response) => {
+          apiLogin(response.authResponse.accessToken);
+        },
+        { scope: "public_profile,email" }
+      );
+    }
   };
 }
