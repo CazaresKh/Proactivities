@@ -1,4 +1,5 @@
 
+using System;
 using API.Services;
 using Domain;
 using Infrastructure.Security;
@@ -32,7 +33,8 @@ namespace API.Extensions
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = key,
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        ClockSkew = TimeSpan.Zero
                     };
                     opt.Events = new JwtBearerEvents
                     {
