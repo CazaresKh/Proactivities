@@ -5,7 +5,7 @@ import { useStore } from "../stores/store";
 
 export default observer(function NavBar() {
   const {
-    userStore: { user, logout },
+    userStore: { user, logout, isLoggedIn },
   } = useStore();
 
   return (
@@ -19,27 +19,35 @@ export default observer(function NavBar() {
           />
           <label>Reactivities</label>
         </Menu.Item>
-        <Menu.Item as={NavLink} to="/activities" name="Activities" />
-        <Menu.Item as={NavLink} to="/errors" name="Errors" />
-        <Menu.Item as={NavLink} to="/create-activity" name="Create activity" />
-        <Menu.Item position="right">
-          <Image
-            src={user?.image || "/assets/user.png"}
-            avatar
-            spaced="right"
-          />
-          <Dropdown pointing="top left" text={user?.displayName}>
-            <Dropdown.Menu>
-              <Dropdown.Item
-                as={Link}
-                to={`/profiles/${user?.userName}`}
-                text="My profile"
-                icon="user"
+        {isLoggedIn && (
+          <>
+            <Menu.Item as={NavLink} to="/activities" name="Activities" />
+            <Menu.Item as={NavLink} to="/errors" name="Errors" />
+            <Menu.Item
+              as={NavLink}
+              to="/create-activity"
+              name="Create activity"
+            />
+            <Menu.Item position="right">
+              <Image
+                src={user?.image || "/assets/user.png"}
+                avatar
+                spaced="right"
               />
-              <Dropdown.Item onClick={logout} text="Logoout" icon="power" />
-            </Dropdown.Menu>
-          </Dropdown>
-        </Menu.Item>
+              <Dropdown pointing="top left" text={user?.displayName}>
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    as={Link}
+                    to={`/profiles/${user?.userName}`}
+                    text="My profile"
+                    icon="user"
+                  />
+                  <Dropdown.Item onClick={logout} text="Logoout" icon="power" />
+                </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Item>
+          </>
+        )}
       </Container>
     </Menu>
   );

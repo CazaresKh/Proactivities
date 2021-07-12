@@ -62,7 +62,10 @@ axios.interceptors.response.use(
         }
         break;
       case 401:
-        if(status === 401 && headers["www-authenticate"].startsWith('Bearer error="invalid_token"')){
+        if (
+          status === 401 &&
+          headers["www-authenticate"]?.startsWith('Bearer error="invalid_token"')
+        ) {
           store.userStore.logout();
           toast.error("Session expired - please login again");
         }
@@ -109,6 +112,10 @@ const Account = {
   fblogin: (accessToken: string) =>
     requests.post<User>(`account/fblogin?accessToken=${accessToken}`, {}),
   refreshToken: () => requests.post<User>("/account/refreshToken", {}),
+  verifyEmail: (token: string, email: string) =>
+    requests.post(`/account/verifyEmail?token=${token}&email=${email}`, {}),
+  resendEmailConfirm: (email: string) =>
+    requests.get(`/account/resendEmailOCnfirmation?email=${email}`),
 };
 
 const Profiles = {
